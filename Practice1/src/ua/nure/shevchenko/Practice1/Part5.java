@@ -23,7 +23,7 @@ public class Part5 {
 	}
 
 	public static String digits2chars(int number) {
-		String tempResult = new String();
+		StringBuilder tempResult = new StringBuilder();
 		for (; number > 0;) {
 			char temp = 0;
 			if ((char) (number % ALPHABET_LENGTH + ALPHABET_START) == ALPHABET_START)
@@ -31,7 +31,7 @@ public class Part5 {
 			else
 				temp = (char) (number % ALPHABET_LENGTH + ALPHABET_START);
 
-			tempResult += temp;
+			tempResult.append(temp);
 			if (number == 26)
 				break;
 			else if (number % 26 == 0) {
@@ -41,8 +41,7 @@ public class Part5 {
 				number /= ALPHABET_LENGTH;
 			}
 		}
-		StringBuilder resultBuild = new StringBuilder(tempResult);
-		return resultBuild.reverse().toString();
+		return tempResult.reverse().toString();
 	}
 
 	public static String rightColumn(String number) {
