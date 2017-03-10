@@ -28,7 +28,6 @@ public class MyListImpl implements MyList {
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
 		init();
 	}
 
@@ -38,8 +37,12 @@ public class MyListImpl implements MyList {
 			Object[] temp = new Object[array.length - 1];
 			int j = 0;
 			for (int i = 0; i < array.length; i++) {
-				if (!o.equals(array[i])) {
-					temp[j++] = array[i];
+				try {
+					if (o != array[i]) {
+						temp[j++] = array[i];
+					}
+				} catch (NullPointerException npe) {
+					i++;
 				}
 			}
 			array = temp;
@@ -53,7 +56,8 @@ public class MyListImpl implements MyList {
 	public Object[] toArray() {
 		Object[] result = new Object[size];
 		for (int i = 0; i <= size; i++) {
-			result[i] = array[i];
+			if (array[i] != null)
+				result[i] = array[i];
 		}
 		return result;
 	}
@@ -66,7 +70,11 @@ public class MyListImpl implements MyList {
 	@Override
 	public boolean contains(Object o) {
 		for (int i = 0; i < array.length; i++)
-			if (o.equals(array[i])) {
+			try {
+				if (o.equals(array[i])) {
+					return true;
+				}
+			} catch (NullPointerException npe) {
 				return true;
 			}
 		return false;
@@ -87,7 +95,12 @@ public class MyListImpl implements MyList {
 		StringBuilder result = new StringBuilder();
 		result.append("{");
 		for (int i = 0; i < size - 1; i++) {
-			result.append("[" + array[i].toString() + "],");
+			try {
+				result.append("[" + array[i].toString() + "],");
+			} catch (NullPointerException npe) {
+				result.append("[null]}");
+			}
+
 		}
 		try {
 			result.append("[" + array[size - 1].toString() + "]}");
@@ -123,13 +136,12 @@ public class MyListImpl implements MyList {
 
 		public Object next() { // returns the next element in the iteration
 			wasMoved = true;
-			try{
+			try {
 				return array[currentIndex++];
-			}
-			catch(NullPointerException npe){
+			} catch (NullPointerException npe) {
 				return "null";
 			}
-			
+
 		}
 
 		public void remove() { // removes from the underlying collection the

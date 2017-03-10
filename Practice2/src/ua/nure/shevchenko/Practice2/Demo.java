@@ -6,16 +6,16 @@ public class Demo {
 	public static void main(String[] args) {
 
 		MyList con = new MyListImpl();
+		MyList con2 =  new MyListImpl();
+		con2.add("A");
+		con2.add("B");
 		con.add("A");
 		con.add("B");
 		con.add(433);
 		con.add(888);
 		con.add(new Object());
-		con.add(null);
-		System.out.println(con.toString());
-		System.out.println(con.contains("A"));
-		con.remove("A");
-		System.out.println(con.toString());
+//		con.add(null);
+		System.out.println(con.containsAll(con2));
 		for (Object o : con) {
 		    System.out.println(o);
 		}
