@@ -2,39 +2,42 @@ package ua.nure.shevchenko.Practice1;
 
 public class Part5 {
 
-	public final static int ALPHABET_LENGTH = 26;
-	public final static int ALPHABET_START = 'A' - 1;
+	public static final int ALPHABET_LENGTH = 26;
+	public static final int ALPHABET_START = 'A' - 1;
+	private static final String[] INPUTS = { "A", "B", "Z", "AA", "AZ", "BA",
+			"ZZ", "AAA" };
 
 	public static void main(String[] args) {
-		System.out.print(chars2digits(args[0]));
-		System.out.print(" ===> ");
-		System.out.print(digits2chars(chars2digits(args[0])));
-		System.out.print(" ===> ");
-		System.out.println(rightColumn(args[0]));
+		for (String x : INPUTS) {
+			System.out.println(x + " ==> " + chars2digits(x) + " ==> "
+					+ digits2chars(chars2digits(x)));
+		}
+
 	}
 
-	public static int chars2digits(String number) {
+	public static int chars2digits(String num) {
 		int result = 0;
-		for (int i = 0; i < number.length(); i++) {
-			result = result * ALPHABET_LENGTH + (int) number.charAt(i)
+		for (int i = 0; i < num.length(); i++) {
+			result = result * ALPHABET_LENGTH + (int) num.charAt(i)
 					- ALPHABET_START;
 		}
 		return result;
 	}
 
-	public static String digits2chars(int number) {
+	public static String digits2chars(int num) {
+		int number = num;
 		StringBuilder tempResult = new StringBuilder();
 		for (; number > 0;) {
 			char temp = 0;
-			if ((char) (number % ALPHABET_LENGTH + ALPHABET_START) == ALPHABET_START)
+			if ((char) (number % ALPHABET_LENGTH + ALPHABET_START) == ALPHABET_START) {
 				temp = ALPHABET_START + ALPHABET_LENGTH;
-			else
+			} else {
 				temp = (char) (number % ALPHABET_LENGTH + ALPHABET_START);
-
+			}
 			tempResult.append(temp);
-			if (number == 26)
+			if (number == 26) {
 				break;
-			else if (number % 26 == 0) {
+			} else if (number % 26 == 0) {
 				number /= ALPHABET_LENGTH;
 				number -= 1;
 			} else {

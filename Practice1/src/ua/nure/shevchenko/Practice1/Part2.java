@@ -6,7 +6,7 @@ public class Part2 {
 		System.out.println(sum(args[0], args[1]));
 	}
 
-	public static double sum(String first, String second) {
-		return Double.parseDouble(first) + Double.parseDouble(second);
+	public static int sum(String first, String second) {
+		return Integer.parseInt(first) + Integer.parseInt(second);
 	}
 }
