@@ -5,22 +5,25 @@ import java.util.Iterator;
 public class Demo {
 	public static void main(String[] args) {
 
-		MyList con = new MyListImpl();
-		MyList con2 =  new MyListImpl();
-		con2.add("A");
-		con2.add("B");
+		MyListImpl con = new MyListImpl();
+
 		con.add("A");
 		con.add("B");
 		con.add(433);
 		con.add(888);
 		con.add(new Object());
-//		con.add(null);
-		System.out.println(con.containsAll(con2));
-		for (Object o : con) {
-		    System.out.println(o);
+		con.add(null);
+		con.add(888);
+		Iterator temp = con.iterator();
+		while(temp.hasNext())
+		{
+			System.out.println(temp.next());
 		}
-		Iterator<Object> it = con.iterator();
-		while (it.hasNext())
-		    System.out.println(it.next());
+		System.out.println("_____________");
+		ListIterator temp2 = con.listIterator();
+		temp2.set(777);
+		while(temp2.hasPrevious()){
+			System.out.println(temp2.previous());
+		}
 	}
 }

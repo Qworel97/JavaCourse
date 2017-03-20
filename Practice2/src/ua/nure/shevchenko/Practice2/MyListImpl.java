@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import ua.nure.shevchenko.Practice2.MyList;
 
-public class MyListImpl implements MyList {
+public class MyListImpl implements MyList, ListIterable {
 
 	public Object[] array;
 	private int size;
@@ -70,13 +70,9 @@ public class MyListImpl implements MyList {
 	@Override
 	public boolean contains(Object o) {
 		for (int i = 0; i < array.length; i++)
-			try {
-				if (o.equals(array[i])) {
+				if (o == array[i]) {
 					return true;
 				}
-			} catch (NullPointerException npe) {
-				return true;
-			}
 		return false;
 	}
 
@@ -94,19 +90,22 @@ public class MyListImpl implements MyList {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		result.append("{");
-		for (int i = 0; i < size - 1; i++) {
-			try {
-				result.append("[" + array[i].toString() + "],");
-			} catch (NullPointerException npe) {
-				result.append("[null]}");
+		String temp = "";
+		for (int i = 0; i < size - 1; i++) {			
+			if (array[i]==null){
+				temp = "null";
 			}
-
+			else{
+				temp = array[i].toString();				
+			} 
+			result.append("[" + temp + "],");
 		}
-		try {
-			result.append("[" + array[size - 1].toString() + "]}");
-		} catch (NullPointerException npe) {
-			result.append("[null]}");
+		if (array[size - 1]!=null){
+			result.append("[" + array[size - 1].toString() + "]}");	
 		}
+		else{
+			result.append("[null]}");			
+		} 					
 		return result.toString();
 	}
 
@@ -125,9 +124,9 @@ public class MyListImpl implements MyList {
 	}
 
 	private class IteratorImpl implements Iterator<Object> {
-		private int currentIndex = 0;
-		private boolean wasMoved = true;
-		private boolean wasRemoved = false;
+		public int currentIndex = 0;
+		public boolean canBeModified = true;
+
 
 		public boolean hasNext() { // returns true if the iteration has more
 									// elements
@@ -135,23 +134,21 @@ public class MyListImpl implements MyList {
 		}
 
 		public Object next() { // returns the next element in the iteration
-			wasMoved = true;
+			canBeModified = true;
 			try {
 				return array[currentIndex++];
 			} catch (NullPointerException npe) {
 				return "null";
 			}
-
 		}
 
 		public void remove() { // removes from the underlying collection the
 								// last element returned by this iterator
-			if (!wasMoved || wasRemoved)
+			if (!canBeModified)
 				throw new IllegalStateException();
 			else {
 				MyListImpl.this.remove(MyListImpl.this.objectAt(currentIndex));
-				wasMoved = false;
-				wasRemoved = true;
+				canBeModified = false;
 			}
 		}
 	}
@@ -160,5 +157,44 @@ public class MyListImpl implements MyList {
 		array = new Object[8];
 		size = 0;
 
+	}
+
+	@Override
+	public ListIterator listIterator() {
+		// TODO Auto-generated method stub
+		return new ListIteratorImpl();
+	}
+	
+	private class ListIteratorImpl extends IteratorImpl implements ListIterator{
+
+		public ListIteratorImpl(){
+			currentIndex = size-1;
+		}
+		@Override
+		public boolean hasPrevious() {
+			return currentIndex >= 0;
+		}
+
+		@Override
+		public Object previous() {
+			canBeModified = true;
+			try {
+				return array[currentIndex--];
+			} catch (NullPointerException npe) {
+				return "null";
+			}
+		}
+
+		@Override
+		public void set(Object e) {
+			// TODO Auto-generated method stub
+			if (!canBeModified)
+				throw new IllegalStateException();
+			else {
+				array[currentIndex]=e;
+				canBeModified = false;
+			}
+		}
+		
 	}
 }
