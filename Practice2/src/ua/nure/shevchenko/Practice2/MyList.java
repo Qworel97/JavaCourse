@@ -1,6 +1,6 @@
 package ua.nure.shevchenko.Practice2;
 
-public interface MyList extends Iterable<Object>{
+public interface MyList extends Iterable<Object>, ListIterable{
 	void add(Object e);
 
 	void clear();

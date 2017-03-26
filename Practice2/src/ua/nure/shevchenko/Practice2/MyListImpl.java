@@ -1,12 +1,13 @@
 package ua.nure.shevchenko.Practice2;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import ua.nure.shevchenko.Practice2.MyList;
 
 public class MyListImpl implements MyList, ListIterable {
 
-	public Object[] array;
+	private Object[] array;
 	private int size;
 
 	public MyListImpl() {
@@ -17,13 +18,12 @@ public class MyListImpl implements MyList, ListIterable {
 	public void add(Object e) {
 		if (size == array.length - 1) {
 			Object[] newArray = new Object[2 * array.length];
-			for (int i = 0; i < array.length; i++) {
-				newArray[i] = array[i];
-			}
+			System.arraycopy(array, 0, newArray, 0, size);
 			newArray[++size] = e;
 			array = newArray;
-		} else
+		} else {
 			array[size++] = e;
+		}
 	}
 
 	@Override
@@ -37,18 +37,15 @@ public class MyListImpl implements MyList, ListIterable {
 			Object[] temp = new Object[array.length - 1];
 			int j = 0;
 			for (int i = 0; i < array.length; i++) {
-				try {
-					if (o != array[i]) {
-						temp[j++] = array[i];
-					}
-				} catch (NullPointerException npe) {
-					i++;
+
+				if (o != array[i]) {
+					temp[j++] = array[i];
 				}
+
 			}
 			array = temp;
 			size--;
 		}
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -56,8 +53,9 @@ public class MyListImpl implements MyList, ListIterable {
 	public Object[] toArray() {
 		Object[] result = new Object[size];
 		for (int i = 0; i <= size; i++) {
-			if (array[i] != null)
+			if (array[i] != null) {
 				result[i] = array[i];
+			}
 		}
 		return result;
 	}
@@ -68,18 +66,19 @@ public class MyListImpl implements MyList, ListIterable {
 	}
 
 	@Override
-	public boolean contains(Object o) {
-		for (int i = 0; i < array.length; i++)
-				if (o == array[i]) {
-					return true;
-				}
+	public boolean contains(Object obj) {
+		for (int j = 0; j < array.length; j++) {
+			if (obj == array[j]) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
-	public boolean containsAll(MyList c) {
-		for (Object o : c) {
-			if (!contains(o)) {
+	public boolean containsAll(MyList other) {
+		for (Object obj : other) {
+			if (!contains(obj)) {
 				return false;
 			}
 		}
@@ -88,24 +87,25 @@ public class MyListImpl implements MyList, ListIterable {
 
 	@Override
 	public String toString() {
+		if (size == 0) {
+			return "[]";
+		}
 		StringBuilder result = new StringBuilder();
-		result.append("{");
+		result.append("[");
 		String temp = "";
-		for (int i = 0; i < size - 1; i++) {			
-			if (array[i]==null){
+		for (int i = 0; i < size - 1; i++) {
+			if (array[i] == null) {
 				temp = "null";
+			} else {
+				temp = array[i].toString();
 			}
-			else{
-				temp = array[i].toString();				
-			} 
-			result.append("[" + temp + "],");
+			result.append("" + temp + ", ");
 		}
-		if (array[size - 1]!=null){
-			result.append("[" + array[size - 1].toString() + "]}");	
+		if (array[size - 1] != null) {
+			result.append("" + array[size - 1] + "]");
+		} else {
+			result.append("null]");
 		}
-		else{
-			result.append("[null]}");			
-		} 					
 		return result.toString();
 	}
 
@@ -124,31 +124,51 @@ public class MyListImpl implements MyList, ListIterable {
 	}
 
 	private class IteratorImpl implements Iterator<Object> {
-		public int currentIndex = 0;
-		public boolean canBeModified = true;
+		private int currentIndex = -1;
+		private boolean canBeModified = true;
 
-
-		public boolean hasNext() { // returns true if the iteration has more
-									// elements
-			return currentIndex < size;
+		public int getCurrentIndex() {
+			return currentIndex;
 		}
 
-		public Object next() { // returns the next element in the iteration
+		public void setCurrentIndex(int currentIndex) {
+			this.currentIndex = currentIndex;
+		}
+
+		public boolean isCanBeModified() {
+			return canBeModified;
+		}
+
+		public void setCanBeModified(boolean canBeModified) {
+			this.canBeModified = canBeModified;
+		}
+
+		public boolean hasNext() {
+			return currentIndex < size - 1;
+		}
+
+		public Object next(){
 			canBeModified = true;
-			try {
-				return array[currentIndex++];
-			} catch (NullPointerException npe) {
-				return "null";
+			if (currentIndex < size) {
+				if (array[currentIndex + 1] != null) {
+					return array[++currentIndex];
+				} else {
+					return null;
+				}
+			} else {
+				throw new NoSuchElementException();
 			}
 		}
 
-		public void remove() { // removes from the underlying collection the
-								// last element returned by this iterator
-			if (!canBeModified)
+		public void remove() {
+			if (!canBeModified) {
 				throw new IllegalStateException();
-			else {
+			} else {
 				MyListImpl.this.remove(MyListImpl.this.objectAt(currentIndex));
 				canBeModified = false;
+				if (currentIndex != 0) {
+					currentIndex--;
+				}
 			}
 		}
 	}
@@ -161,40 +181,48 @@ public class MyListImpl implements MyList, ListIterable {
 
 	@Override
 	public ListIterator listIterator() {
-		// TODO Auto-generated method stub
+
 		return new ListIteratorImpl();
 	}
-	
-	private class ListIteratorImpl extends IteratorImpl implements ListIterator{
 
-		public ListIteratorImpl(){
-			currentIndex = size-1;
-		}
+	private class ListIteratorImpl extends IteratorImpl implements ListIterator {
+
 		@Override
 		public boolean hasPrevious() {
-			return currentIndex >= 0;
+			return getCurrentIndex() > -1;
 		}
 
 		@Override
 		public Object previous() {
-			canBeModified = true;
-			try {
-				return array[currentIndex--];
-			} catch (NullPointerException npe) {
-				return "null";
+			setCanBeModified(true);
+			if (getCurrentIndex() > -1) {
+				if (array[getCurrentIndex()] != null) {
+					try{
+					return array[getCurrentIndex()];}
+					finally{
+						setCurrentIndex(getCurrentIndex()-1);
+					}
+				} else {
+					return null;
+				}
 			}
+			return null;
+
 		}
 
 		@Override
 		public void set(Object e) {
-			// TODO Auto-generated method stub
-			if (!canBeModified)
+
+			if (!isCanBeModified()) {
 				throw new IllegalStateException();
-			else {
-				array[currentIndex]=e;
-				canBeModified = false;
+			} else {
+				if (getCurrentIndex() == -1) {
+					setCurrentIndex(0);
+				}
+				array[getCurrentIndex()] = e;
+				setCanBeModified(false);
 			}
 		}
-		
+
 	}
 }
