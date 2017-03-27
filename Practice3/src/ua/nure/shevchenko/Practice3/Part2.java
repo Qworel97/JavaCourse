@@ -5,41 +5,37 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Part2 {
-	private final static String INPUT_DATA;
-	private final static String PATH = "part2.txt";
-	private final static Pattern PATTERN_MIN;
-	private final static Pattern PATTERN_MAX;
-	private final static String LINE_SEPARATOR = System.lineSeparator();
+	private static final Pattern PATTERN_MIN;
+	private static final Pattern PATTERN_MAX;
+	private static final String LINE_SEPARATOR = System.lineSeparator();
 
 	public static void main(String[] args) {
-		System.out.println(convert(PATH));
 	}
 
 	static {
-		INPUT_DATA = Util.readFile(PATH);
-		PATTERN_MIN = Pattern.compile("(?m)(?<=\\W)\\S(?=\\s)");
-		PATTERN_MAX = Pattern.compile("(?m)(?<=\\W)\\w++(?=\\W)");
+		PATTERN_MIN = Pattern.compile("(?m)(?<=(\\s|'))\\S(?=\\s)");
+		PATTERN_MAX = Pattern.compile("(?m)(?<=\\W)([A-z]|[À-ÿ])++(?=\\W)");
 	}
 
 	public static String convert(String input) {
-		String sb = "Min: ";
-		Matcher m = PATTERN_MIN.matcher(INPUT_DATA);
+		StringBuilder sb = new StringBuilder("Min: ");
+		Matcher m = PATTERN_MIN.matcher(input);
 		while (m.find()) {
-			if (!sb.contains(INPUT_DATA.substring(m.start(), m.end()))) {
-				sb += INPUT_DATA.substring(m.start(), m.end());
+			if (!sb.toString().contains(input.substring(m.start(), m.end()))) {
+				sb.append(input.substring(m.start(), m.end()));
 				if (!m.hitEnd()) {
-					sb += ", ";
+					sb.append(", ");
 				}
 			}
 		}
-		sb = sb.substring(0, sb.length()-2);
-		sb += LINE_SEPARATOR;
-		sb += "Max: ";
-		m = PATTERN_MAX.matcher(INPUT_DATA);
+		sb = new StringBuilder(sb.toString().substring(0, sb.length()-2));
+		sb.append(LINE_SEPARATOR);
+		sb.append("Max: ");
+		m = PATTERN_MAX.matcher(input);
 		ArrayList<String> temp = new ArrayList<String>();
 		while (m.find()) {
-			if (!sb.contains(INPUT_DATA.substring(m.start(), m.end()))) {
-				temp.add(INPUT_DATA.substring(m.start(), m.end()));
+			if (!sb.toString().contains(input.substring(m.start(), m.end()))) {
+				temp.add(input.substring(m.start(), m.end()));
 			}
 		}
 		int maxLength = 0;
@@ -49,11 +45,11 @@ public class Part2 {
 			}
 		}
 		for (String x : temp) {
-			if (!sb.contains(x) && x.length() == maxLength) {
-				sb += x + ", ";
+			if (!sb.toString().contains(x) && x.length() == maxLength) {
+				sb.append(x + ", ");
 			}
 		}
-		sb = sb.substring(0, sb.length()-2);
+		sb = new StringBuilder(sb.toString().substring(0, sb.length()-2));
 		return sb.toString();
 	}
 }

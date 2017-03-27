@@ -7,15 +7,15 @@ public class Util {
 
 	private static final String ENCODING = "Cp1251";
 
-	public static String readFile(String path) {
-		String res = null;
+	public static String readFile(String way) {
+		String result = null;
 		try {
-			byte[] bytes = Files.readAllBytes(Paths.get(path));
-			res = new String(bytes, ENCODING);
-		} catch (IOException ex) {
-			ex.printStackTrace();
+			byte[] byteArray = Files.readAllBytes(Paths.get(way));
+			result = new String(byteArray, ENCODING);
+		} catch (IOException e) {
+			System.err.println(e);
 		}
-		return res;
+		return result;
 	}
 
 	public static void main(String[] args) {

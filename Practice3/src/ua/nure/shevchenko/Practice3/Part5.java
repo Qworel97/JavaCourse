@@ -1,8 +1,8 @@
 package ua.nure.shevchenko.Practice3;
 
 public class Part5 {
-	private final static String[] ROME = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C" };
-	private final static Integer[] DIGITS = { 1, 4, 5, 9, 10, 40, 50, 90, 100 };
+	private static final String[] ROME = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C" };
+	private static final Integer[] DIGITS = { 1, 4, 5, 9, 10, 40, 50, 90, 100 };
 
 	public static void main(String[] args) {
 		for (int i = 1; i <= 100; i++) {
@@ -12,20 +12,21 @@ public class Part5 {
 
 	public static String decimal2Roman(int x) {
 		int res = x;
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		while (res > 0) {
 			for (int i = 8; i >= 0;) {
 				if (res >= DIGITS[i]) {
 					res -= DIGITS[i];
-					s += ROME[i];
+					s.append(ROME[i]);
 				} else {
 					i--;
 				}
 			}
 		}
-		return s;
+		return s.toString();
 	}
-	public static int roman2Decimal(String s) {
+	public static int roman2Decimal(String input) {
+		String s = input;
 		int res = 0;
 		while (s.length()>0){
 			for(int i = 8; i>=0;){
