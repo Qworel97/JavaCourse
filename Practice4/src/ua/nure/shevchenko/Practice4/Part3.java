@@ -15,51 +15,52 @@ public class Part3 {
 	private static final Pattern PATTERN_DOUBLE;
 
 	static {
-		PATTERN_CHAR = Pattern.compile("(?<=(\\s|'|^))\\S(?=\\s)",Pattern.UNICODE_CHARACTER_CLASS);
-		PATTERN_STRING = Pattern.compile("(?<=\\W)(\\p{L}+){2,}(?=\\W)",Pattern.UNICODE_CHARACTER_CLASS);
+		PATTERN_CHAR = Pattern.compile("(?<=(\\s|'|^))\\S(?=\\s)",
+				Pattern.UNICODE_CHARACTER_CLASS);
+		PATTERN_STRING = Pattern.compile("(?<=\\W)(\\p{L}+){2,}(?=\\W)",
+				Pattern.UNICODE_CHARACTER_CLASS);
 		PATTERN_INT = Pattern.compile("(?<=\\s|^)\\d+(?=\\s|$)");
-		PATTERN_DOUBLE = Pattern.compile("(?<=\\s|^)\\d+[.]\\d*(?=\\s|$)" + "|(?<=\\s|^)\\d*[.]\\d+(?=\\s|$)");
+		PATTERN_DOUBLE = Pattern.compile("(?<=\\s|^)\\d+[.]\\d*(?=\\s|$)"
+				+ "|(?<=\\s|^)\\d*[.]\\d+(?=\\s|$)");
 	}
 
 	public static void main(String[] args) {
-		String input = Util.readFile(DATA,"CP1251");
+		String input = Util.readFile(DATA, "CP1251");
 		Scanner scan = new Scanner(System.in);
-		try {
-			String temp = scan.nextLine();
-			while (!temp.equals("stop")) {
+			while (scan.hasNext()) {
+				String temp = scan.nextLine();
 				switch (temp) {
 				case "char": {
-					match(PATTERN_CHAR, input);
+					System.out.println(match(PATTERN_CHAR, input));
 					break;
 				}
 				case "String": {
-					match(PATTERN_STRING, input);
+					System.out.println(match(PATTERN_STRING, input));
 					break;
 				}
 				case "int": {
-					match(PATTERN_INT, input);
+					System.out.println(match(PATTERN_INT, input));
 					break;
 				}
 				case "double": {
-					match(PATTERN_DOUBLE, input);
+					System.out.println(match(PATTERN_DOUBLE, input));
 					break;
 				}
+				case "stop": {
+					scan.close();
+					return;
 				}
-				temp = scan.nextLine();
-			}
-		} catch (NoSuchElementException nsee) {
-			System.err.println(nsee.getMessage());
-		} finally {
-			scan.close();
-		}
+				}
+			}	
 	}
 
-	public static void match(Pattern pat, String input) {
+	public static String match(Pattern pat, String input) {
+		StringBuilder res = new StringBuilder();
 		Matcher m = pat.matcher(input);
 		while (m.find()) {
-			System.out.print(input.substring(m.start(), m.end()) + " ");
+			res.append(input.substring(m.start(), m.end()) + " ");
 		}
-		System.out.println();
+		return res.toString();
 	}
 
 }

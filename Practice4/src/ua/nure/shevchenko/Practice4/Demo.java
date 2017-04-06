@@ -20,7 +20,7 @@ public class Demo {
 
 		System.out.println("=========================== PART3");
 		// set the mock input
-		System.setIn(new ByteArrayInputStream("char\nString\nint\ndouble\nstop".getBytes(ENCODING)));
+		System.setIn(new ByteArrayInputStream("char\nString\nint\ndouble".getBytes(ENCODING)));
 		Part3.main(args);
 		// restore the standard input
 		System.setIn(STD_IN);
@@ -30,7 +30,7 @@ public class Demo {
 
 		System.out.println("=========================== PART5");
 		// set the mock input
-		System.setIn(new ByteArrayInputStream("table ru\ntable en\napple ru\nstop".getBytes(ENCODING)));
+		System.setIn(new ByteArrayInputStream("table ru\ntable en\napple ru".getBytes(ENCODING)));
 		Part5.main(args);
 		// restore the standard input
 	}

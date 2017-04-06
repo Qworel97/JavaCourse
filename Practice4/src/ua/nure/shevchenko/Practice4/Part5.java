@@ -10,18 +10,23 @@ public class Part5 {
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
-		String temp = scan.nextLine();
-		try {
-			while (!temp.equals("stop")) {
-				ResourceBundle rb = ResourceBundle.getBundle(BASE_NAME + temp.split(" ")[1]);
-				System.out.println(rb.getString(temp.split(" ")[0]));
-				temp = scan.nextLine();
+
+			while (scan.hasNext()) {
+				String temp = scan.nextLine();
+				if (!temp.equals("stop")) {
+					System.out.println(getResourceData(temp));
+				} else {
+					scan.close();
+					return;
+				}
 			}
-		} catch (NoSuchElementException nsee) {
-			System.err.println(nsee.getMessage());
-		} finally {
-			scan.close();
-		}
+			return;
+		
+	}
+	public static final String getResourceData(String input){
+		ResourceBundle rb = ResourceBundle.getBundle(BASE_NAME
+				+ input.split(" ")[1]);
+		return rb.getString(input.split(" ")[0]);
 	}
 
 }
