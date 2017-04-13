@@ -11,9 +11,15 @@ import ua.nure.shevchenko.Practice4.Part2;
 public class Part2Test {
 	@Test
 	public void testToIntArray(){
-		String actual = Part2.toIntArray(new String[]{"1","2","3"}).toString();
-		String expected = new int[]{1,2,3}.toString();
-		Assert.assertEquals(expected, actual);
+		int[] actual = Part2.toIntArray(new String[]{"1","2","3"});
+		int[] expected = new int[]{1,2,3};
+		boolean result = true;
+		for(int i = 0; i<actual.length;i++){
+			if(actual[i]!=expected[i]){
+				result = false;
+			}
+		}
+		Assert.assertEquals(true, result);
 	}
 
 	@Test

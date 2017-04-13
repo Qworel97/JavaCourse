@@ -2,9 +2,11 @@ package ua.nure.shevchenko.Practice4;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
 public class Util {
@@ -20,44 +22,25 @@ public class Util {
 		return result;
 	}
 
-	public static void writeFile(String fileName, String text)
-	{
+	public static void writeFile(String fileName, String text) {
 		File file = new File(fileName);
-		
-		try {
-			if(!file.exists()) {
-				file.createNewFile();
-			}
-            FileWriter writer = new FileWriter(fileName, true);
-            BufferedWriter bufferWriter = new BufferedWriter(writer);
-			try {
-	            bufferWriter.write(text);
-			} 
-			finally {
-	            bufferWriter.close();	
-			}
 
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
-		try{
-			if(!file.exists()) {
-				file.createNewFile();
+		try {
+			if (!file.exists() && !file.createNewFile()) {
+				throw new IOException();
 			}
-			PrintWriter out = new PrintWriter(file.getAbsoluteFile());
-			try {
-				out.print(text);	
-			} 
-			finally {
-				out.close();
-			}
+			Writer writer = new OutputStreamWriter(new FileOutputStream(
+					fileName), StandardCharsets.UTF_8);
+			BufferedWriter bufferWriter = new BufferedWriter(writer);
+			bufferWriter.write(text);
+			bufferWriter.close();
+
+		} catch (IOException e) {
+			System.out.println(e);
 		}
-		catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+
 	}
-	
+
 	public static void main(String[] args) {
 	}
 }

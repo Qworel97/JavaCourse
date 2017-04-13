@@ -8,7 +8,7 @@ public class Part2 {
 
 	private static final String SORTED_DATA = "part2_sorted.txt";
 
-	private static final int N = 20;
+	private static final int N = 10;
 
 	private static final int MIN = 0;
 	private static final int MAX = 50;
@@ -16,7 +16,7 @@ public class Part2 {
 	public static void main(String[] args) {
 		String randData = createRand();
 		Util.writeFile(RAW_DATA, randData);
-		System.out.println("input => " + randData);
+		System.out.println("input ==> " + randData);
 		String[] input = Util.readFile(RAW_DATA,"CP1251").split(" ");
 		int[] toSort = toIntArray(input);
 		toSort = sort(toSort);
@@ -25,7 +25,7 @@ public class Part2 {
 			temp.append(x + " ");
 		}
 		Util.writeFile(SORTED_DATA, temp.toString());
-		System.out.println("output => " + temp.toString());
+		System.out.println("output ==> " + temp.toString());
 	}
 
 	public static String createRand(){

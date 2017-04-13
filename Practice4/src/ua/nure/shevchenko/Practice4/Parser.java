@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Parser implements Iterable<String> {
+public class Parser implements Iterable<String> {
 
 	private static final Pattern PATTERN_LINE;
 
@@ -17,7 +17,7 @@ class Parser implements Iterable<String> {
 	}
 
 	{
-		array = new String[8];
+		array = new String[31582];
 		size = 0;
 	}
 
@@ -25,17 +25,11 @@ class Parser implements Iterable<String> {
 		String input = Util.readFile(fileName, encoding);
 		Matcher m = PATTERN_LINE.matcher(input);
 		while (m.find()) {
-			if (size == array.length - 1) {
-				String[] newArray = new String[2 * array.length];
-				System.arraycopy(array, 0, newArray, 0, size);
-				newArray[++size] = input.substring(m.start(), m.end());
-				array = newArray;
-			} else {
-				array[size++] = input.substring(m.start(), m.end());
+				array[size++] = input.substring(m.start(), m.end())
+						.replace(System.lineSeparator(), " ")
+						.replace("  ", " ");
 			}
 		}
-
-	}
 
 	@Override
 	public Iterator<String> iterator() {

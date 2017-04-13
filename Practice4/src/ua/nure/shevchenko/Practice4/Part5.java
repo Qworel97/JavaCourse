@@ -1,6 +1,5 @@
 package ua.nure.shevchenko.Practice4;
 
-import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -9,7 +8,7 @@ public class Part5 {
 	private static final String BASE_NAME = "resources_";
 
 	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
+		Scanner scan = new Scanner(System.in, "UTF-8");
 
 			while (scan.hasNext()) {
 				String temp = scan.nextLine();
