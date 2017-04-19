@@ -3,7 +3,7 @@
 <Bank>
 <Name>Test</Name>
 <Country>Test</Country>
-<Type>FIRST</Type>
+<Type>First</Type>
 <Depositor>Test</Depositor>
 <AccountId>2</AccountId>
 <AmountOnDeposit>3.0</AmountOnDeposit>
@@ -13,7 +13,7 @@
 <Bank>
 <Name>Test</Name>
 <Country>Test</Country>
-<Type>FIRST</Type>
+<Type>First</Type>
 <Depositor>Test</Depositor>
 <AccountId>2</AccountId>
 <AmountOnDeposit>3.0</AmountOnDeposit>
