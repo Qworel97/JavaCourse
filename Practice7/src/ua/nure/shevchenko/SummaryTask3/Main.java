@@ -13,10 +13,11 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws Exception {
+		/*
 		if (args.length != 1) {
 			usage();
 			return;
-		}
+		}*/
 		
 		String xmlFileName = "input.xml";
 		System.out.println("Input ==> " + xmlFileName);

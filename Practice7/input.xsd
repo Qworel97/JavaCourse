@@ -35,9 +35,12 @@
 	
 	<xsd:simpleType name="Types">
     <xsd:restriction base="xsd:string">
-        <xsd:enumeration value="First" />
-        <xsd:enumeration value="Second" />
-        <xsd:enumeration value="Third" />
+        <xsd:enumeration value="Poste restante" />
+        <xsd:enumeration value="Urgent" />
+        <xsd:enumeration value="Checking account" />
+        <xsd:enumeration value="Cumulative" />
+        <xsd:enumeration value="Savings" />
+        <xsd:enumeration value="Metal" />
     </xsd:restriction>
 	</xsd:simpleType>
 	

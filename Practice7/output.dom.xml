@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ContributionsCollection>
 <Bank>
-<Name>Test</Name>
+<Name>Test1</Name>
 <Country>Test</Country>
-<Type>First</Type>
+<Type>Poste restante</Type>
+<Depositor>Test</Depositor>
+<AccountId>2</AccountId>
+<AmountOnDeposit>31.0</AmountOnDeposit>
+<Profitability>0.05</Profitability>
+<TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
+</Bank>
+<Bank>
+<Name>Test2</Name>
+<Country>Test</Country>
+<Type>Checking account</Type>
+<Depositor>Test</Depositor>
+<AccountId>2</AccountId>
+<AmountOnDeposit>333.0</AmountOnDeposit>
+<Profitability>0.1</Profitability>
+<TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
+</Bank>
+<Bank>
+<Name>Test3</Name>
+<Country>Test</Country>
+<Type>Urgent</Type>
 <Depositor>Test</Depositor>
 <AccountId>2</AccountId>
 <AmountOnDeposit>3.0</AmountOnDeposit>
@@ -11,13 +31,13 @@
 <TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
 </Bank>
 <Bank>
-<Name>Test</Name>
+<Name>Test4</Name>
 <Country>Test</Country>
-<Type>First</Type>
+<Type>Savings</Type>
 <Depositor>Test</Depositor>
 <AccountId>2</AccountId>
-<AmountOnDeposit>3.0</AmountOnDeposit>
-<Profitability>0.2</Profitability>
+<AmountOnDeposit>3421.0</AmountOnDeposit>
+<Profitability>0.25</Profitability>
 <TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
 </Bank>
 </ContributionsCollection>

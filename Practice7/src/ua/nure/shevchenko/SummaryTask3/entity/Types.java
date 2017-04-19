@@ -33,12 +33,18 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum Types {
 
-    @XmlEnumValue("First")
-    FIRST("First"),
-    @XmlEnumValue("Second")
-    SECOND("Second"),
-    @XmlEnumValue("Third")
-    THIRD("Third");
+    @XmlEnumValue("Poste restante")
+    POSTERESTANTE("Poste restante"),
+    @XmlEnumValue("Urgent")
+    URGENT("Urgent"),
+    @XmlEnumValue("Checking account")
+    CHECKINGACCOUNT("Checking account"),
+    @XmlEnumValue("Cumulative")
+    CUMULATIVE("Cumulative"),
+    @XmlEnumValue("Savings")
+    SAVINGS("Savings"),
+    @XmlEnumValue("Metal")
+    METAL("Metal");
     private final String value;
 
     Types(String v) {
