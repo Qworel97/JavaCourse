@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<st3:ContributionsCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:st3="http://nure.ua/shevchenko/Practice7/entity"
+		xsi:schemaLocation="http://nure.ua/shevchenko/Practice7/entity input.xsd">			
+		
+	<Bank>	
+		<Name>Test</Name>
+		<Country>Test</Country>
+		<Type>First</Type>
+		<Depositor>Test</Depositor>
+		<AccountId>2</AccountId>
+		<AmountOnDeposit>3.0</AmountOnDeposit>
+		<Profitability>0.2</Profitability>
+		<TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
+	</Bank>		
+	
+		<Bank>	
+		<Name>Test</Name>
+		<Country>Test</Country>
+		<Type>First</Type>
+		<Depositor>Test</Depositor>
+		<AccountId>2</AccountId>
+		<AmountOnDeposit>3.0</AmountOnDeposit>
+		<Profitability>0.2</Profitability>
+		<TimeConstraints>2001-1dadadfdfaf1:32:52</TimeConstraints>
+	</Bank>		
+	
+</st3:ContributionsCollection>

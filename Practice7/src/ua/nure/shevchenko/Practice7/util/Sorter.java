@@ -42,15 +42,15 @@ public class Sorter {
 	};
 
 	public static final void sortBankByName(ContributionsCollection cc) {
-		Collections.sort(cc.getBank(), SORT_BANKS_BY_NAME);
+		Collections.sort(cc.getBanks(), SORT_BANKS_BY_NAME);
 	}
 	
 	public static final void sortBankByAmmountOnDeposit(ContributionsCollection cc) {
-		Collections.sort(cc.getBank(), SORT_BANKS_BY_AMMOUNTONDEPOSIT);
+		Collections.sort(cc.getBanks(), SORT_BANKS_BY_AMMOUNTONDEPOSIT);
 	}
 	
 	public static final void sortBankByProfitability(ContributionsCollection cc) {
-		Collections.sort(cc.getBank(), SORT_BANKS_BY_PROFITABILITY);
+		Collections.sort(cc.getBanks(), SORT_BANKS_BY_PROFITABILITY);
 	}
 
 

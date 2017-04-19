@@ -1,7 +1,10 @@
 package ua.nure.shevchenko.Practice7.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -12,9 +15,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import ua.nure.shevchenko.Practice7.constants.Constants;
 import ua.nure.shevchenko.Practice7.constants.XML;
-import ua.nure.shevchenko.Practice7.entity.Answer;
-import ua.nure.shevchenko.Practice7.entity.Question;
-import ua.nure.shevchenko.Practice7.entity.Test;
+import ua.nure.shevchenko.Practice7.entity.Bank;
+import ua.nure.shevchenko.Practice7.entity.ContributionsCollection;
+import ua.nure.shevchenko.Practice7.entity.Types;
+import ua.nure.shevchenko.Practice7.util.Util;
 
 public class SAXController extends DefaultHandler {
 	
@@ -24,11 +28,9 @@ public class SAXController extends DefaultHandler {
 	private String currentElement;
 
 	// main container
-	private Test test;
+	private ContributionsCollection cc;
 	
-	private Question question;
-	
-	private Answer answer;
+	private Bank bank;
 
 	public SAXController(String xmlFileName) {
 		this.xmlFileName = xmlFileName;
@@ -70,8 +72,8 @@ public class SAXController extends DefaultHandler {
 		throw e;
 	};
 
-	public Test getTest() {
-		return test;
+	public ContributionsCollection getContributionsCollection() {
+		return cc;
 	}
 
 	// ///////////////////////////////////////////////////////////
@@ -85,22 +87,14 @@ public class SAXController extends DefaultHandler {
 
 		currentElement = localName;
 
-		if (XML.TEST.equalsTo(currentElement)) {
-			test = new Test();
+		if (XML.CONTRIBUTIONSCOLLECTION.equalsTo(currentElement)) {
+			cc = new ContributionsCollection();
 			return;
 		}
 
-		if (XML.QUESTION.equalsTo(currentElement)) {
-			question = new Question();
+		if (XML.BANK.equalsTo(currentElement)) {
+			bank = new Bank();
 			return;
-		}
-
-		if (XML.ANSWER.equalsTo(currentElement)) {
-			answer = new Answer();
-			if (attributes.getLength() > 0) {
-				answer.setCorrect(Boolean.parseBoolean(attributes.getValue(uri,
-						XML.CORRECT.value())));
-			}
 		}
 	}
 
@@ -115,30 +109,59 @@ public class SAXController extends DefaultHandler {
 			return;
 		}
 
-		if (XML.QUESTION_TEXT.equalsTo(currentElement)) {
-			question.setQuestionText(elementText);
+		if (XML.NAME.equalsTo(currentElement)) {
+			bank.setName(elementText);
 			return;
 		}
 
-		if (XML.ANSWER.equalsTo(currentElement)) {
-			answer.setContent(elementText);
+		if (XML.COUNTRY.equalsTo(currentElement)) {
+			bank.setCountry(elementText);
 			return;
 		}
+		
+		if (XML.TYPE.equalsTo(currentElement)) {
+			bank.setType(Types.fromValue(elementText));
+			return;
+		}
+		
+		if (XML.DEPOSITOR.equalsTo(currentElement)) {
+			bank.setDepositor(elementText);
+			return;
+		}
+		
+		if (XML.ACCOUNTID.equalsTo(currentElement)) {
+			bank.setAccountId(Integer.parseInt(elementText));
+			return;
+		}
+		
+		if (XML.AMOUNTONDEPOSIT.equalsTo(currentElement)) {
+			bank.setAmountOnDeposit(BigDecimal.valueOf(Double.parseDouble(elementText)));
+			return;
+		}
+		
+		if (XML.PROFITABILITY.equalsTo(currentElement)) {
+			bank.setProfitability(BigDecimal.valueOf(Double.parseDouble(elementText)));
+			return;
+		}
+		
+		if (XML.TIMECONSTRAINTS.equalsTo(currentElement)) {
+			try {
+				bank.setTimeConstraints(Util.fromStringToXMLGregorian(elementText));
+			} catch (DatatypeConfigurationException | ParseException e) {
+				System.err.println(e.getMessage());
+			}
+			return;
+		}
+		
 	}
 
 	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 
-		if (XML.QUESTION.equalsTo(localName)) {
+		if (XML.BANK.equalsTo(localName)) {
 			// just add question to container
-			test.getQuestions().add(question);
-			return;
-		}
-
-		if (XML.ANSWER.equalsTo(localName)) {
-			// just add answer to container
-			question.getAnswers().add(answer);
+			cc.getBanks().add(bank);
 			return;
 		}
 	}
@@ -152,11 +175,11 @@ public class SAXController extends DefaultHandler {
 		saxContr.parse(true);
 		
 		// obtain container
-		Test test = saxContr.getTest();
+		ContributionsCollection cc = saxContr.getContributionsCollection();
 
 		// we have Test object at this point:
 		System.out.println("====================================");
-		System.out.print("Here is the test: \n" + test);
+		System.out.print("Here is the test: \n" + cc);
 		System.out.println("====================================");
 
 		// now try to parse NOT valid XML (failed)
@@ -168,7 +191,7 @@ public class SAXController extends DefaultHandler {
 			System.err.println("====================================");
 			System.err.println("Validation is failed:\n" + ex.getMessage());
 			System.err
-					.println("Try to print test object:" + saxContr.getTest());
+					.println("Try to print test object:" + saxContr.getContributionsCollection());
 			System.err.println("====================================");
 		}
 
@@ -177,7 +200,7 @@ public class SAXController extends DefaultHandler {
 
 		// we have Test object at this point:
 		System.out.println("====================================");
-		System.out.print("Here is the test: \n" + saxContr.getTest());
+		System.out.print("Here is the test: \n" + saxContr.getContributionsCollection());
 		System.out.println("====================================");
 	}
 }

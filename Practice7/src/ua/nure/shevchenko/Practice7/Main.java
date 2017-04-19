@@ -13,11 +13,10 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		/*
 		if (args.length != 1) {
 			usage();
 			return;
-		}*/
+		}
 		
 		String xmlFileName = "input.xml";
 		System.out.println("Input ==> " + xmlFileName);
@@ -29,7 +28,7 @@ public class Main {
 		// get
 		DOMController domController = new DOMController(xmlFileName);
 		domController.parse(true);
-		ContributionsCollection cc = domController.getTest();
+		ContributionsCollection cc = domController.getContributionsCollection();
 
 		// sort (case 1)
 		Sorter.sortBankByName(cc);
@@ -42,14 +41,14 @@ public class Main {
 		////////////////////////////////////////////////////////
 		// SAX
 		////////////////////////////////////////////////////////
-		/*
+		
 		// get
 		SAXController saxController = new SAXController(xmlFileName);
 		saxController.parse(true);
-		cc = saxController.getTest();
+		cc = saxController.getContributionsCollection();
 		
 		// sort  (case 2)
-		Sorter.sortQuestionsByAnswersNumber(cc);
+		Sorter.sortBankByAmmountOnDeposit(cc);
 		
 		// save
 		outputXmlFile = "output.sax.xml";
@@ -58,6 +57,7 @@ public class Main {
 		DOMController.saveToXML(cc, outputXmlFile);
 		System.out.println("Output ==> " + outputXmlFile);
 		
+		
 		////////////////////////////////////////////////////////
 		// StAX
 		////////////////////////////////////////////////////////
@@ -65,13 +65,13 @@ public class Main {
 		// get
 		STAXController staxController = new STAXController(xmlFileName);
 		staxController.parse();
-		cc = staxController.getTest();
+		cc = staxController.getContributionsCollection();
 		
 		// sort  (case 3)
-		Sorter.sortAnswersByContent(cc);
+		Sorter.sortBankByProfitability(cc);
 		
 		// save
-		outputXmlFile = "output.stax.xml";*/
+		outputXmlFile = "output.stax.xml";
 		DOMController.saveToXML(cc, outputXmlFile);
 		System.out.println("Output ==> " + outputXmlFile);
 	}

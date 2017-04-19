@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -35,6 +33,7 @@ import ua.nure.shevchenko.Practice7.constants.XML;
 import ua.nure.shevchenko.Practice7.entity.Bank;
 import ua.nure.shevchenko.Practice7.entity.ContributionsCollection;
 import ua.nure.shevchenko.Practice7.entity.Types;
+import ua.nure.shevchenko.Practice7.util.Util;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -51,7 +50,7 @@ public class DOMController {
 		this.xmlFileName = xmlFileName;
 	}
 
-	public ContributionsCollection getTest() {
+	public ContributionsCollection getContributionsCollection() {
 		return cc;
 	}
 
@@ -111,7 +110,7 @@ public class DOMController {
 		for (int j = 0; j < banksNodes.getLength(); j++) {
 			Bank bank = getBank(banksNodes.item(j));
 			// add question to container
-			cc.getBank().add(bank);
+			cc.getBanks().add(bank);
 		}
 	}
 
@@ -150,18 +149,13 @@ public class DOMController {
 		qtNode = qElement.getElementsByTagName(XML.PROFITABILITY.value()).item(0);
 		question.setProfitability(BigDecimal.valueOf(Double.parseDouble(qtNode.getTextContent())));
 
-		qtNode = qElement.getElementsByTagName(XML.TIMECONSTRAINTS.value()).item(0);
-		DateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-		Date date = format.parse(qtNode.getTextContent());
-		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.setTime(date);
-		XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-		question.setTimeConstraints(date2);
+		qtNode = qElement.getElementsByTagName(XML.TIMECONSTRAINTS.value()).item(0);		
+		question.setTimeConstraints(Util.fromStringToXMLGregorian(qtNode.getTextContent()));
 
 		return question;
 	}
 
-	public static Document getDocument(ContributionsCollection cc) throws ParserConfigurationException {
+	public static Document getDocument(ContributionsCollection cc) throws ParserConfigurationException, DOMException, DatatypeConfigurationException, ParseException {
 
 		// obtain DOM parser
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -181,7 +175,7 @@ public class DOMController {
 		document.appendChild(tElement);
 
 		// add questions elements
-		for (Bank bank : cc.getBank()) {
+		for (Bank bank : cc.getBanks()) {
 
 			// add question
 			Element qElement = document.createElement(XML.BANK.value());
@@ -217,11 +211,7 @@ public class DOMController {
 			qElement.appendChild(qtElement);
 			
 			qtElement = document.createElement(XML.TIMECONSTRAINTS.value());
-			Calendar calendar = bank.getTimeConstraints().toGregorianCalendar();
-			SimpleDateFormat fmt = new SimpleDateFormat(Constants.DATE_FORMAT);
-		    fmt.setCalendar(calendar);
-		    String dateFormatted = fmt.format(calendar.getTime());
-			qtElement.setTextContent(dateFormatted);
+			qtElement.setTextContent(Util.fromXMLGregorianString(bank.getTimeConstraints()));
 			qElement.appendChild(qtElement);
 		}
 
@@ -235,9 +225,12 @@ public class DOMController {
 	 *            Test object to be saved.
 	 * @param xmlFileName
 	 *            Output XML file name.
+	 * @throws ParseException 
+	 * @throws DatatypeConfigurationException 
+	 * @throws DOMException 
 	 */
 	public static void saveToXML(ContributionsCollection cc, String xmlFileName)
-			throws ParserConfigurationException, TransformerException {
+			throws ParserConfigurationException, TransformerException, DOMException, DatatypeConfigurationException, ParseException {
 		// Test -> DOM -> XML
 		saveToXML(getDocument(cc), xmlFileName);
 	}
@@ -273,7 +266,7 @@ public class DOMController {
 		} catch (SAXException ex) {
 			System.err.println("====================================");
 			System.err.println("XML not valid");
-			System.err.println("Test object --> " + domContr.getTest());
+			System.err.println("Test object --> " + domContr.getContributionsCollection());
 			System.err.println("====================================");
 		}
 
@@ -282,11 +275,11 @@ public class DOMController {
 
 		// we have Test object at this point:
 		System.out.println("====================================");
-		System.out.print("Here is the test: \n" + domContr.getTest());
+		System.out.print("Here is the test: \n" + domContr.getContributionsCollection());
 		System.out.println("====================================");
 
 		// save test in XML file
-		ContributionsCollection cc = domContr.getTest();
+		ContributionsCollection cc = domContr.getContributionsCollection();
 		DOMController.saveToXML(cc, Constants.INVALID_XML_FILE + ".dom-result.xml");
 	}
 }

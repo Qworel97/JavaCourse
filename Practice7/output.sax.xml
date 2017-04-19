@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ContributionsCollection>
+<Bank>
+<Name>Test</Name>
+<Country>Test</Country>
+<Type>FIRST</Type>
+<Depositor>Test</Depositor>
+<AccountId>2</AccountId>
+<AmountOnDeposit>3.0</AmountOnDeposit>
+<Profitability>0.2</Profitability>
+<TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
+</Bank>
+<Bank>
+<Name>Test</Name>
+<Country>Test</Country>
+<Type>FIRST</Type>
+<Depositor>Test</Depositor>
+<AccountId>2</AccountId>
+<AmountOnDeposit>3.0</AmountOnDeposit>
+<Profitability>0.2</Profitability>
+<TimeConstraints>2001-10-26T21:32:52</TimeConstraints>
+</Bank>
+</ContributionsCollection>

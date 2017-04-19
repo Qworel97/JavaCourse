@@ -68,7 +68,7 @@ public class ContributionsCollection {
      * 
      * 
      */
-    public List<Bank> getBank() {
+    public List<Bank> getBanks() {
         if (bank == null) {
             bank = new ArrayList<Bank>();
         }
