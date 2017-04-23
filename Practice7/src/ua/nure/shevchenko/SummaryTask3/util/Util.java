@@ -10,23 +10,48 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
 import ua.nure.shevchenko.SummaryTask3.constants.Constants;
 
 public class Util {
 
-	public static XMLGregorianCalendar fromStringToXMLGregorian(String text) throws DatatypeConfigurationException, ParseException{
+	/**
+	 * Creates XMLGregorianCalendar object from String.
+	 * 
+	 * @param text
+	 *            String text.
+	 * @return XMLGregorianCalendar object.
+	 */
+	public static XMLGregorianCalendar fromStringToXMLGregorian(String text) {
 		DateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-		Date date = format.parse(text);
+		Date date = new Date();
+		try {
+			date = format.parse(text);
+		} catch (ParseException e) {
+			System.err.println(e.getMessage());
+		}
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
-		return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+		try {
+			return DatatypeFactory.newInstance().newXMLGregorianCalendar(
+					calendar);
+		} catch (DatatypeConfigurationException e) {
+			System.err.println(e.getMessage());
+		}
+		return null;
 	}
-	
-	public static String fromXMLGregorianString(XMLGregorianCalendar xmlGregorianCalendar) throws DatatypeConfigurationException, ParseException{
+
+	/**
+	 * Creates String object from XMLGregorianCalendar.
+	 * 
+	 * @param XMLGregorianCalendar
+	 *            XMLGregorianCalendar xmlGregorianCalendar.
+	 * @return String object.
+	 */
+	public static String fromXMLGregorianString(
+			XMLGregorianCalendar xmlGregorianCalendar) {
 		Calendar calendar = xmlGregorianCalendar.toGregorianCalendar();
 		SimpleDateFormat fmt = new SimpleDateFormat(Constants.DATE_FORMAT);
-	    fmt.setCalendar(calendar);
+		fmt.setCalendar(calendar);
 		return fmt.format(calendar.getTime());
 	}
 }

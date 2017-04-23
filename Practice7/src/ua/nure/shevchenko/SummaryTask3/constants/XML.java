@@ -1,7 +1,6 @@
 package ua.nure.shevchenko.SummaryTask3.constants;
 
 public enum XML {
-	// elements names
 	CONTRIBUTIONSCOLLECTION("ContributionsCollection"), BANK("Bank"),
 	NAME("Name"), COUNTRY("Country"),
 	TYPE("Type"), DEPOSITOR("Depositor"),

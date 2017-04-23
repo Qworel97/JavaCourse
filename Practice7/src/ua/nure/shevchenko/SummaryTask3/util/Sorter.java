@@ -3,22 +3,10 @@ package ua.nure.shevchenko.SummaryTask3.util;
 import java.util.Collections;
 import java.util.Comparator;
 
-import ua.nure.shevchenko.SummaryTask3.constants.Constants;
-import ua.nure.shevchenko.SummaryTask3.controller.DOMController;
 import ua.nure.shevchenko.SummaryTask3.entity.Bank;
 import ua.nure.shevchenko.SummaryTask3.entity.ContributionsCollection;
 
-/**
- * Contains static methods for sorting.
- * 
- * @author D.Kolesnikov
- * 
- */
 public class Sorter {
-
-	// //////////////////////////////////////////////////////////
-	// these are comparators
-	// //////////////////////////////////////////////////////////
 
 	public static final Comparator<Bank> SORT_BANKS_BY_NAME = new Comparator<Bank>() {
 		@Override
@@ -51,30 +39,5 @@ public class Sorter {
 	
 	public static final void sortBankByProfitability(ContributionsCollection cc) {
 		Collections.sort(cc.getBanks(), SORT_BANKS_BY_PROFITABILITY);
-	}
-
-
-
-	public static void main(String[] args) throws Exception {
-		// Test.xml --> Test object
-		DOMController domController = new DOMController(
-				Constants.VALID_XML_FILE);
-		domController.parse(false);
-		/*
-		ContributionsCollection test = domController.ge();
-
-		System.out.println("====================================");
-		System.out.println(test);
-		System.out.println("====================================");
-
-		System.out.println("====================================");
-		Sorter.sortQuestionsByQuestionText(test);
-		System.out.println(test);
-		System.out.println("====================================");
-
-		System.out.println("====================================");
-		Sorter.sortAnswersByContent(test);
-		System.out.println(test);
-		*/
 	}
 }

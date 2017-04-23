@@ -1,5 +1,16 @@
 package ua.nure.shevchenko.SummaryTask3;
 
+import java.io.IOException;
+import java.text.ParseException;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
+
 import ua.nure.shevchenko.SummaryTask3.controller.DOMController;
 import ua.nure.shevchenko.SummaryTask3.controller.SAXController;
 import ua.nure.shevchenko.SummaryTask3.controller.STAXController;
@@ -12,68 +23,77 @@ public class Main {
 		System.out.println("java ua.nure.shevchenko.Practice7.Main xmlFileName");
 	}
 	
-	public static void main(String[] args) throws Exception {
-		/*
+	public static void main(String[] args){
+		
 		if (args.length != 1) {
 			usage();
 			return;
-		}*/
+		}
 		
 		String xmlFileName = "input.xml";
 		System.out.println("Input ==> " + xmlFileName);
 		
-		////////////////////////////////////////////////////////
-		// DOM
-		////////////////////////////////////////////////////////
-		
-		// get
 		DOMController domController = new DOMController(xmlFileName);
-		domController.parse(true);
+		try {
+			domController.parse(true);
+		} catch (DOMException | ParserConfigurationException | SAXException
+				| IOException e) {
+			System.err.println(e.getMessage());
+		}
 		ContributionsCollection cc = domController.getContributionsCollection();
 
-		// sort (case 1)
 		Sorter.sortBankByName(cc);
 		
-		// save
 		String outputXmlFile = "output.dom.xml";
-		DOMController.saveToXML(cc, outputXmlFile);
+		try {
+			DOMController.saveToXML(cc, outputXmlFile);
+		} catch (DOMException | ParserConfigurationException
+				| TransformerException | DatatypeConfigurationException
+				| ParseException e) {
+			System.err.println(e.getMessage());
+		}
 		System.out.println("Output ==> " + outputXmlFile);
 
-		////////////////////////////////////////////////////////
-		// SAX
-		////////////////////////////////////////////////////////
-		
-		// get
 		SAXController saxController = new SAXController(xmlFileName);
-		saxController.parse(true);
+		try {
+			saxController.parse(true);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			System.err.println(e.getMessage());
+		}
 		cc = saxController.getContributionsCollection();
 		
-		// sort  (case 2)
 		Sorter.sortBankByAmmountOnDeposit(cc);
 		
-		// save
 		outputXmlFile = "output.sax.xml";
 		
-		// other way: 
-		DOMController.saveToXML(cc, outputXmlFile);
+		try {
+			DOMController.saveToXML(cc, outputXmlFile);
+		} catch (DOMException | ParserConfigurationException
+				| TransformerException | DatatypeConfigurationException
+				| ParseException e) {
+			System.err.println(e.getMessage());
+		}
 		System.out.println("Output ==> " + outputXmlFile);
 		
-		
-		////////////////////////////////////////////////////////
-		// StAX
-		////////////////////////////////////////////////////////
-		
-		// get
 		STAXController staxController = new STAXController(xmlFileName);
-		staxController.parse();
+		try {
+			staxController.parse();
+		} catch (ParserConfigurationException | SAXException | IOException
+				| XMLStreamException e) {
+			System.err.println(e.getMessage());
+		}
 		cc = staxController.getContributionsCollection();
 		
-		// sort  (case 3)
 		Sorter.sortBankByProfitability(cc);
 		
-		// save
 		outputXmlFile = "output.stax.xml";
-		DOMController.saveToXML(cc, outputXmlFile);
+		try {
+			DOMController.saveToXML(cc, outputXmlFile);
+		} catch (DOMException | ParserConfigurationException
+				| TransformerException | DatatypeConfigurationException
+				| ParseException e) {
+			System.err.println(e.getMessage());
+		}
 		System.out.println("Output ==> " + outputXmlFile);
 	}
 

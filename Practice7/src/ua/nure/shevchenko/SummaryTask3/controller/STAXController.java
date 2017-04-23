@@ -2,15 +2,11 @@ package ua.nure.shevchenko.SummaryTask3.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -20,7 +16,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ua.nure.shevchenko.SummaryTask3.constants.Constants;
 import ua.nure.shevchenko.SummaryTask3.constants.XML;
 import ua.nure.shevchenko.SummaryTask3.entity.ContributionsCollection;
 import ua.nure.shevchenko.SummaryTask3.entity.Bank;
@@ -31,9 +26,13 @@ public class STAXController extends DefaultHandler {
 
 	private String xmlFileName;
 
-	// main container
 	private ContributionsCollection cc;
 
+	/**
+	 * Returns current ContributionsCollection
+	 * 
+	 * @return ContributionsCollection object
+	 */
 	public ContributionsCollection getContributionsCollection() {
 		return cc;
 	}
@@ -51,95 +50,86 @@ public class STAXController extends DefaultHandler {
 
 		Bank bank = null;
 		
-		// current element name holder
-		String currentElement = null;
+		String currElem = null;
 		
-		XMLInputFactory factory = XMLInputFactory.newInstance();
+		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 		
-		factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
+		xmlInputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
 
-		XMLEventReader reader = factory.createXMLEventReader(
+		XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(
 				new StreamSource(xmlFileName));
 
-		while (reader.hasNext()) {
-			XMLEvent event = reader.nextEvent();
+		while (xmlEventReader.hasNext()) {
+			XMLEvent xmlEvent = xmlEventReader.nextEvent();
 
-			// skip any empty content
-			if (event.isCharacters() && event.asCharacters().isWhiteSpace()) {
+			if (xmlEvent.isCharacters() && xmlEvent.asCharacters().isWhiteSpace()) {
 				continue;
 			}
 
-			// handler for start tags
-			if (event.isStartElement()) {
-				StartElement startElement = event.asStartElement();
-				currentElement = startElement.getName().getLocalPart();
+			if (xmlEvent.isStartElement()) {
+				StartElement startElem = xmlEvent.asStartElement();
+				currElem = startElem.getName().getLocalPart();
 
-				if (XML.CONTRIBUTIONSCOLLECTION.equalsTo(currentElement)) {
+				if (XML.CONTRIBUTIONSCOLLECTION.equalsTo(currElem)) {
 					cc = new ContributionsCollection();
 					continue;
 				}
 
-				if (XML.BANK.equalsTo(currentElement)) {
+				if (XML.BANK.equalsTo(currElem)) {
 					bank = new Bank();
 					continue;
 				}
 
 			}
 
-			// handler for contents
-			if (event.isCharacters()) {
-				Characters characters = event.asCharacters();
+			if (xmlEvent.isCharacters()) {
+				Characters characters = xmlEvent.asCharacters();
 
 
-				if (XML.NAME.equalsTo(currentElement)) {
+				if (XML.NAME.equalsTo(currElem)) {
 					bank.setName(characters.getData());
 					continue;
 				}
 
-				if (XML.COUNTRY.equalsTo(currentElement)) {
+				if (XML.COUNTRY.equalsTo(currElem)) {
 					bank.setCountry(characters.getData());
 					continue;
 				}
 				
-				if (XML.TYPE.equalsTo(currentElement)) {
+				if (XML.TYPE.equalsTo(currElem)) {
 					bank.setType(Types.fromValue(characters.getData()));
 					continue;
 				}
 				
-				if (XML.DEPOSITOR.equalsTo(currentElement)) {
+				if (XML.DEPOSITOR.equalsTo(currElem)) {
 					bank.setDepositor(characters.getData());
 					continue;
 				}
 				
-				if (XML.ACCOUNTID.equalsTo(currentElement)) {
+				if (XML.ACCOUNTID.equalsTo(currElem)) {
 					bank.setAccountId(Integer.parseInt(characters.getData()));
 					continue;
 				}
 				
-				if (XML.AMOUNTONDEPOSIT.equalsTo(currentElement)) {
+				if (XML.AMOUNTONDEPOSIT.equalsTo(currElem)) {
 					bank.setAmountOnDeposit(BigDecimal.valueOf(Double.parseDouble(characters.getData())));
 					continue;
 				}
 				
-				if (XML.PROFITABILITY.equalsTo(currentElement)) {
+				if (XML.PROFITABILITY.equalsTo(currElem)) {
 					bank.setProfitability(BigDecimal.valueOf(Double.parseDouble(characters.getData())));
 					continue;
 				}
 				
-				if (XML.TIMECONSTRAINTS.equalsTo(currentElement)) {
-					try {
-						bank.setTimeConstraints(Util.fromStringToXMLGregorian(characters.getData()));
-					} catch (DatatypeConfigurationException | ParseException e) {
-						System.err.println(e.getMessage());
-					}
+				if (XML.TIMECONSTRAINTS.equalsTo(currElem)) {
+					bank.setTimeConstraints(Util.fromStringToXMLGregorian(characters.getData()));
 					continue;
 				}
 			}
 
-			// handler for end tags
-			if (event.isEndElement()) {
-				EndElement endElement = event.asEndElement();
-				String localName = endElement.getName().getLocalPart();
+			if (xmlEvent.isEndElement()) {
+				EndElement endElem = xmlEvent.asEndElement();
+				String localName = endElem.getName().getLocalPart();
 
 				if (XML.BANK.equalsTo(localName)) {
 					cc.getBanks().add(bank);
@@ -147,21 +137,6 @@ public class STAXController extends DefaultHandler {
 				}
 			}
 		}
-		reader.close();
-	}
-
-	public static void main(String[] args) throws Exception {
-
-		// try to parse (valid) XML file (success)
-		STAXController staxContr = new STAXController(Constants.VALID_XML_FILE);
-		staxContr.parse(); // <-- do parse (success)
-
-		// obtain container
-		ContributionsCollection cc = staxContr.getContributionsCollection();
-
-		// we have Test object at this point:
-		System.out.println("====================================");
-		System.out.print("Here is the test: \n" + cc);
-		System.out.println("====================================");
+		xmlEventReader.close();
 	}
 }
