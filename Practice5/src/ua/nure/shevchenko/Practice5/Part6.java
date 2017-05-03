@@ -18,8 +18,6 @@ public class Part6 extends Thread {
 
 	private RandomAccessFile out;
 
-	// TODO place your code here
-
 	@Override
 	public void run() {
 		try {

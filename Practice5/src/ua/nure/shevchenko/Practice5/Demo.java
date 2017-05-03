@@ -1,4 +1,4 @@
-package ua.nure.your_last_name.Practice5;
+package ua.nure.shevchenko.Practice5;
 
 
 public class Demo {

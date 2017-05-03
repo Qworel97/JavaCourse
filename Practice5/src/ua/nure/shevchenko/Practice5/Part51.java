@@ -26,12 +26,14 @@ public class Part51 {
 	// stop signal
 	private static boolean stop;
 
+	private static String monitor = "";
+	private static String monitor2 = "";
+
 	// reader
 	private static class Reader extends Thread {
 		public void run() {
 			while (!stop) {
 				try {
-
 					// read from the buffer
 					read(getName());
 
@@ -40,6 +42,7 @@ public class Part51 {
 				}
 			}
 		}
+
 	}
 
 	// writer
@@ -61,19 +64,26 @@ public class Part51 {
 				}
 			}
 		}
+
 	}
 
 	private static void read(String threadName) throws InterruptedException {
-		System.out.printf("Reader %s:", threadName);
-		for (int j = 0; j < BUFFER_LENGTH; j++) {
-			Thread.sleep(PAUSE);
-			System.out.print(BUFFER.charAt(j));
+		synchronized (monitor) {
+			synchronized (monitor2) {
+			System.out.printf("Reader %s:", threadName);
+			for (int j = 0; j < BUFFER_LENGTH; j++) {
+				Thread.sleep(PAUSE);
+				System.out.print(BUFFER.charAt(j));				
+			}
+			System.out.println();
+			Thread.sleep(5);
+			monitor2.notifyAll();	
+			}
 		}
-		System.out.println();
-		Thread.sleep(5);
 	}
 
-	private static void write() throws InterruptedException {
+	private static void  write() throws InterruptedException {
+		synchronized (monitor2) {
 		// clear buffer
 		BUFFER.setLength(0);
 
@@ -89,6 +99,9 @@ public class Part51 {
 		}
 		System.err.println();
 		Thread.sleep(5);
+		monitor.notifyAll();
+		}
+
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -101,16 +114,15 @@ public class Part51 {
 			readers.add(new Reader());
 		}
 
+		// start writer
+		Thread.sleep(10);
+		writer.start();
+
 		// start readers
 		Thread.sleep(10);
 		for (Thread reader : readers) {
 			reader.start();
 		}
-
-		// start writer
-		Thread.sleep(10);
-		writer.start();
-
 		// main thread is waiting for the child threads
 		writer.join();
 		for (Thread reader : readers) {
