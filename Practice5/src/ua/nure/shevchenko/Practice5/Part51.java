@@ -26,8 +26,9 @@ public class Part51 {
 	// stop signal
 	private static boolean stop;
 
+	private static int readers = 0; // number of active readers
+
 	private static String monitor = "";
-	private static String monitor2 = "";
 
 	// reader
 	private static class Reader extends Thread {
@@ -69,37 +70,52 @@ public class Part51 {
 
 	private static void read(String threadName) throws InterruptedException {
 		synchronized (monitor) {
-			synchronized (monitor2) {
-			System.out.printf("Reader %s:", threadName);
-			for (int j = 0; j < BUFFER_LENGTH; j++) {
-				Thread.sleep(PAUSE);
-				System.out.print(BUFFER.charAt(j));				
+			if (readers > 0) {
+				readers--;
+				System.out.printf("Reader %s:", threadName);
+				for (int j = 0; j < BUFFER_LENGTH; j++) {
+					Thread.sleep(PAUSE);
+					System.out.print(BUFFER.charAt(j));
+				}
+				System.out.println();
+				Thread.sleep(5);
 			}
-			System.out.println();
-			Thread.sleep(5);
-			monitor2.notifyAll();	
+			else{
+				monitor.notifyAll();
 			}
 		}
+
 	}
 
-	private static void  write() throws InterruptedException {
-		synchronized (monitor2) {
-		// clear buffer
-		BUFFER.setLength(0);
+	private static void write() throws InterruptedException {
+		synchronized (monitor) {
+			while (readers != 0)
+		    {
+		      try
+		      {
+		    	  monitor.wait();
+		      }
+		      catch (InterruptedException e) {}
+		    }
+			if (readers == 0) {
+				readers = READERS_NUMBER;
+				// clear buffer
+				BUFFER.setLength(0);
 
-		// write to buffer
-		System.err.print("Writer writes:");
+				// write to buffer
+				System.err.print("Writer writes:");
 
-		Random random = new Random();
-		for (int j = 0; j < BUFFER_LENGTH; j++) {
-			Thread.sleep(PAUSE);
-			char ch = (char) ('A' + random.nextInt(26));
-			System.err.print(ch);
-			BUFFER.append(ch);
-		}
-		System.err.println();
-		Thread.sleep(5);
-		monitor.notifyAll();
+				Random random = new Random();
+				for (int j = 0; j < BUFFER_LENGTH; j++) {
+					Thread.sleep(PAUSE);
+					char ch = (char) ('A' + random.nextInt(26));
+					System.err.print(ch);
+					BUFFER.append(ch);
+				}
+				System.err.println();
+				Thread.sleep(5);
+				monitor.notifyAll();
+			}
 		}
 
 	}
