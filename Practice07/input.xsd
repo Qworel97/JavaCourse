@@ -28,20 +28,20 @@
 
 	<xsd:simpleType name="Profit">
 		<xsd:restriction base="xsd:decimal">
-      <xsd:minInclusive value="0"/>
-      <xsd:maxInclusive value="1"/>
-    	</xsd:restriction>
+      			<xsd:minInclusive value="0"/>
+      			<xsd:maxInclusive value="1"/>
+    		</xsd:restriction>
 	</xsd:simpleType>
 	
 	<xsd:simpleType name="Types">
-    <xsd:restriction base="xsd:string">
-        <xsd:enumeration value="Poste restante" />
-        <xsd:enumeration value="Urgent" />
-        <xsd:enumeration value="Checking account" />
-        <xsd:enumeration value="Cumulative" />
-        <xsd:enumeration value="Savings" />
-        <xsd:enumeration value="Metal" />
-    </xsd:restriction>
+    		<xsd:restriction base="xsd:string">
+        		<xsd:enumeration value="Poste restante" />
+        		<xsd:enumeration value="Urgent" />
+        		<xsd:enumeration value="Checking account" />
+        		<xsd:enumeration value="Cumulative" />
+       			<xsd:enumeration value="Savings" />
+        		<xsd:enumeration value="Metal" />
+    		</xsd:restriction>
 	</xsd:simpleType>
 	
 </xsd:schema>
