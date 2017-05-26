@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/WebApplication2"
+  crossContext="true" reloadable="true">
+ 
+<Resource name="jdbc/st4db" auth="Container" type="javax.sql.DataSource"
+          driverClassName="com.org.apache.derby.jdbc.ClientDriver"
+          url="jdbc:derby://localhost:1527/st4db;create=true;"
+          username="test" password="test" maxActive="20"
+          maxIdle="10" maxWait="-1" />
+</Context>
